@@ -1,0 +1,107 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-07-21 21:04:18
+ * @LastEditTime: 2020-07-22 17:26:39
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \myNotes\project\supermall\myRecord\vue的响应式.html
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 
+    1.app.message修改数据，Vue内部是如何监听message数据的改变
+    *Object.defineProperty——》监听对象的改变*
+
+    2.当数据发生改变，Vue是如何知道要通知哪些人。界面发生刷新
+    *发布订阅者模式*
+    
+   -->
+  <div id="app">
+    {{message}}
+    {{message}}
+    {{message}}
+
+  </div>
+  <script>
+    // Vue内部会复制data
+    const obj = {
+      message: '徐佳丽',
+      hello: '哈哈哈哈'
+    }
+    Object.keys(obj).forEach(key => {
+      let value = obj[key]
+      // 监听每个属性
+      Object.defineProperty(obj, key, {
+        set(newValue) {
+          value = newValue
+          console.log('监听' + key + '改变');
+          // 告诉谁了？谁用告诉谁?谁在用了？根据解析html,获取到哪些人有用属性
+        },
+        get() {
+          console.log('获取属性' + key + '对应值');
+          // 每个用到该属性的地方都要get,故由此可知道有谁在用，然后让这些人订阅属性的改变
+          // get——》update
+
+          return value
+        }
+      })
+    })
+    // 发布订阅者模式
+    // 发布者
+    class Dep {
+      constructor() {
+        // 记录订阅者
+        this.subs = []
+      }
+      addSub(watcher) {
+        this.subs.push(watcher)
+      }
+      notify() {
+        // 通知订阅者更新
+        this.subs.forEach(item=>{
+          item.update()
+        })
+      }
+    }
+    // 订阅者
+    class Watcher {
+      constructor(name) {
+        this.name = name
+      }
+      update() {
+        console.log(this.name + '更新');
+
+      }
+    }
+    const dep = new Dep()
+    const w1 = new Watcher('张三')
+    dep.addSub(w1)
+    const w2 = new Watcher('李四')
+    dep.addSub(w2)
+    const w3 = new Watcher('王五')
+    dep.addSub(w3)
+ 
+  </script>
+  <script src="../node_modules/vue/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        message: '徐佳丽',
+        hello: '哈哈哈哈'
+      }
+    })
+
+  </script>
+</body>
+
+</html>

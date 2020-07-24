@@ -1,32 +1,29 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-06-13 16:43:52
+ * @LastEditTime: 2020-06-27 20:08:12
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \myNotes\project\supermall\src\App.vue
+--> 
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <keep-alive exclude="Detail">
+      <router-view />
+    </keep-alive>
+
+    <MainTabBar />
   </div>
 </template>
-
+<script>
+import MainTabBar from "content/mainTabbar/MainTabBar";
+export default {
+  name: "App",
+  components: {
+    MainTabBar
+  }
+};
+</script>
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+@import "assets/css/base.css";
 </style>
