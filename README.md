@@ -1,3 +1,4 @@
+学习前端的时候做一个在线商城的项目
 # supermall
 
 ## Project setup
